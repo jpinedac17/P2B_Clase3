@@ -26,33 +26,25 @@ public class Pedido {
         calcularTotal();
     }
 
-    // ERROR 5: Cálculo incorrecto del total (suma precios sin considerar cantidades) (check)
-    private void calcularTotal() {
-
+    public void calcularTotal() {
         total = 0;
         for (Producto producto : productos) {
-            total = producto.getPrecio() * producto.getCantidad() ; // Suma solo el precio, no considera cantidad(check)
-
+            total += producto.getPrecio() * producto.getCantidad();
         }
-
     }
 
-    // ERROR 6: Método que puede causar IndexOutOfBoundsException (check)
     public Producto obtenerPrimerProducto() {
-        if (productos==null || productos.isEmpty()){ //con esto le decimos que si la lista no ha sido creada (null) o no tiene productos (empty) mande el mensaje en consola
-            System.out.println("La lista no puede estar vacia");
+        if (productos == null || productos.isEmpty()) {
+            System.out.println("La lista no puede estar vacía");
             return null;
         }
-        return productos.get(0); // No verifica si la lista está vacía
+        return productos.get(0);
     }
 
-    // ERROR 7: Descuento mal aplicado (check)
     public double aplicarDescuento(double porcentaje) {
-        // Aplica el descuento sumándolo en lugar de restándolo (check)
         return total - (total * porcentaje / 100);
     }
 
-    // Getters
     public int getId() { return id; }
     public Cliente getCliente() { return cliente; }
     public List<Producto> getProductos() { return productos; }

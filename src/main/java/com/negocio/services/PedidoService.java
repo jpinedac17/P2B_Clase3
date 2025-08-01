@@ -17,34 +17,33 @@ public class PedidoService {
         this.contadorPedidos = 1;
     }
 
-    // ERROR 11: Inicialización incorrecta de variables(check)
     public Pedido crearPedido(Cliente cliente) {
         Pedido pedido = new Pedido(contadorPedidos, cliente);
-        contadorPedidos++; // Debería incrementar, no decrementar
+        contadorPedidos++; // Incrementar correctamente
         pedidos.add(pedido);
         return pedido;
     }
 
-    // ERROR 12: Condición mal formulada en bucle (check)
     public boolean agregarProductoAPedido(int pedidoId, int productoId, int cantidad) {
         Pedido pedido = buscarPedidoPorId(pedidoId);
         if (pedido == null) return false;
 
-        Producto producto = inventarioService.buscarProductoPorId(productoId);
-        if (producto == null) return false;
+        Producto productoOriginal = inventarioService.buscarProductoPorId(productoId);
+        if (productoOriginal == null) return false;
 
-
-
-
-        // Bucle innecesario con condición incorrecta
-        for (int i = 0; i < cantidad; i++) { // Debería ser < en lugar de !=
-            if (inventarioService.venderProducto(productoId, 1)) {
-                pedido.agregarProducto(producto);
-                //
-            } else {
-                return false;
-            }
+        if (!inventarioService.venderProducto(productoId, cantidad)) {
+            return false;
         }
+
+        Producto productoPedido = new Producto(
+                productoOriginal.getId(),
+                productoOriginal.getNombre(),
+                productoOriginal.getPrecio(),
+                0,
+                cantidad
+        );
+
+        pedido.agregarProducto(productoPedido);
         return true;
     }
 
